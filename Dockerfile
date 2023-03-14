@@ -25,4 +25,4 @@ RUN python -m venv /py && \
 
 ENV PATH="/py/bin:$PATH"
 
-USER djanog-user
+USER django-user
