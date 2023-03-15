@@ -15,3 +15,4 @@ class CalcTests(SimpleTestCase):
 
         res = calc.substract(12,7)
         self.assertEqual(res,5)
+        
