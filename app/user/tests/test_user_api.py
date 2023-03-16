@@ -157,4 +157,4 @@ class PrivateUserApiTests(TestCase):
         self.user.refresh_from_db()
         self.assertEqual(self.user.name, payload['name'])
         self.assertTrue(self.user.check_password(payload['password']))
-        self.assertEqual
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
