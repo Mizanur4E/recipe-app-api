@@ -18,6 +18,17 @@ class UserSerializer(serializers.ModelSerializer):
 
         return get_user_model().objects.create_user(**validated_data)
 
+    def update(self, instance, validated_data):
+
+        password = validated_data.pop('password', None)
+        user = super().update(instance, validated_data)
+
+        if password:
+            user.set_password(password)
+            user.save()
+
+        return user
+
 
 class AuthTokenSerializer(serializers.Serializer):
 
@@ -43,17 +54,3 @@ class AuthTokenSerializer(serializers.Serializer):
 
         attrs['user'] = user
         return attrs
-
-    def test_create_token_blank_password(self):
-        """Test posting a blank password returns an error."""
-        payload = {'email': 'test@example.com', 'password': ''}
-        res = self.client.post(TOKEN_URL, payload)
-
-        self.assertNotIn('token', res.data)
-        self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
-
-    def test_retrieve_user_unauthorized(self):
-        """Test authentication is required for users."""
-        res = self.client.get(ME_URL)
-
-        self.assertEqual(res.status_code, status.HTTP_401_UNAUTHORIZED)
